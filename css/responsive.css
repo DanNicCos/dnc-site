@@ -1,0 +1,246 @@
+@media (min-width: 768px) {
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-md);
+    }
+    
+    .hero {
+        padding: var(--spacing-lg);
+        gap: var(--spacing-lg);
+    }
+    
+    .entity-container {
+        width: 350px;
+        height: 350px;
+    }
+    
+    .code-float {
+        font-size: 0.875rem;
+    }
+    
+    .demo-area {
+        grid-template-columns: 1.5fr 1fr;
+    }
+    
+    .capabilities {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-lg);
+    }
+    
+    .hero {
+        padding: var(--spacing-xl) var(--spacing-xl) calc(var(--spacing-xl) + 80px);
+    }
+    
+    .entity-container {
+        width: 450px;
+        height: 450px;
+    }
+    
+    .hero-card {
+        max-width: 600px;
+        padding: var(--spacing-lg);
+    }
+    
+    .showcase {
+        min-height: 100vh;
+        max-height: 100vh;
+        overflow: hidden;
+        padding: var(--spacing-xl);
+    }
+    
+    .showcase.active {
+        display: flex;
+    }
+    
+    .capabilities {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .terminal-body {
+        min-height: 400px;
+    }
+}
+
+@media (min-width: 1440px) {
+    .container {
+        max-width: 1400px;
+        padding: 0 var(--spacing-xl);
+    }
+    
+    .entity-container {
+        width: 500px;
+        height: 500px;
+    }
+    
+    .hero-card {
+        max-width: 700px;
+        padding: var(--spacing-xl);
+    }
+    
+    .showcase-content {
+        max-width: 1200px;
+    }
+    
+    .demo-area {
+        grid-template-columns: 2fr 1fr;
+    }
+}
+
+@media (max-width: 767px) {
+    :root {
+        --spacing-xl: 3rem;
+        --spacing-lg: 1.5rem;
+    }
+    
+    .hero-name {
+        font-size: 2.5rem;
+    }
+    
+    .hero-separator {
+        font-size: 2rem;
+    }
+    
+    .hero-tagline {
+        font-size: 1rem;
+    }
+    
+    .code-float {
+        display: none;
+    }
+    
+    .entity-container {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .showcase {
+        padding: var(--spacing-md);
+    }
+    
+    .terminal-body {
+        padding: var(--spacing-md);
+        min-height: 200px;
+    }
+    
+    .capabilities {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact {
+        bottom: var(--spacing-md);
+    }
+    
+    .hero {
+        padding: var(--spacing-lg) var(--spacing-lg) calc(var(--spacing-lg) + 60px);
+    }
+    
+    .hero-card {
+        padding: var(--spacing-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-header {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+    
+    .hero-name {
+        font-size: 2rem;
+    }
+    
+    .hero-separator {
+        display: none;
+    }
+    
+    .hero-title {
+        font-size: 1rem;
+    }
+    
+    .hero-tagline {
+        font-size: 0.9rem;
+    }
+    
+    .entity-container {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .cta-button {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 0.9rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .hero-card .interaction-prompt {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: all;
+    }
+    
+    .cta-button:active {
+        transform: scale(0.98);
+    }
+    
+    .capability:active {
+        background: rgba(0, 255, 136, 0.1);
+        border-color: var(--color-accent-dim);
+    }
+    
+    .contact-link:active {
+        color: var(--color-accent);
+    }
+}
+
+@media screen and (max-height: 600px) and (orientation: landscape) {
+    .hero {
+        min-height: auto;
+        padding: var(--spacing-md);
+    }
+    
+    .entity-container {
+        width: 150px;
+        height: 150px;
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .hero-name {
+        font-size: 2rem;
+    }
+    
+    .hero-tagline {
+        margin-bottom: var(--spacing-md);
+    }
+}
+
+@supports (backdrop-filter: blur(10px)) {
+    .demo-overlay {
+        backdrop-filter: blur(10px);
+    }
+}
+
+@supports not (backdrop-filter: blur(10px)) {
+    .demo-overlay {
+        background: rgba(0, 0, 0, 0.95);
+    }
+}
