@@ -11,8 +11,8 @@
     }
     
     .entity-container {
-        width: 350px;
-        height: 350px;
+        width: 550px;
+        height: 550px;
     }
     
     .code-float {
@@ -40,8 +40,8 @@
     }
     
     .entity-container {
-        width: 450px;
-        height: 450px;
+        width: 650px;
+        height: 650px;
     }
     
     .hero-card {
@@ -76,8 +76,8 @@
     }
     
     .entity-container {
-        width: 500px;
-        height: 500px;
+        width: 750px;
+        height: 750px;
     }
     
     .hero-card {
@@ -117,8 +117,8 @@
     }
     
     .entity-container {
-        width: 250px;
-        height: 250px;
+        width: 400px;
+        height: 400px;
     }
     
     .showcase {
@@ -170,8 +170,8 @@
     }
     
     .entity-container {
-        width: 200px;
-        height: 200px;
+        width: 350px;
+        height: 350px;
     }
     
     .cta-button {
@@ -219,8 +219,8 @@
     }
     
     .entity-container {
-        width: 150px;
-        height: 150px;
+        width: 300px;
+        height: 300px;
         margin-bottom: var(--spacing-md);
     }
     

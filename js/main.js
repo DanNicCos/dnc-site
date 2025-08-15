@@ -40,6 +40,7 @@ class Portfolio {
         });
     }
     
+    
     initializeComponents() {
         console.log('Initializing components...');
         const canvas = document.getElementById('ai-entity');
@@ -148,28 +149,34 @@ class Portfolio {
                 if (!isRevealed) {
                     isRevealed = true;
                     
-                    // Hide the tagline button completely
-                    taglineButton.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                    taglineButton.style.opacity = '0';
-                    taglineButton.style.transform = 'translateY(-30px)';
-                    taglineButton.style.pointerEvents = 'none';
+                    // Get the hero elements that need to be transformed
+                    const heroHeaderClean = document.querySelector('.hero-header-clean');
+                    const heroSection = document.querySelector('.hero');
+                    const entityContainer = document.querySelector('.entity-container');
                     
-                    // Enhance entity size and reveal nodes
-                    if (this.entity) {
-                        setTimeout(() => {
-                            // Scale up the entity container
-                            const entityContainer = document.querySelector('.entity-container');
-                            if (entityContainer) {
-                                entityContainer.style.transition = 'transform 1.2s cubic-bezier(0.23, 1, 0.32, 1)';
-                                entityContainer.style.transform = 'scale(1.3)';
-                            }
-                            
-                            // Reveal the entity nodes
-                            this.entity.reveal();
-                            
-                            // Setup modal system for node clicks
-                            this.setupNodeModals();
-                        }, 300);
+                    if (heroHeaderClean && heroSection && entityContainer) {
+                        // Add CSS class for styled centered state
+                        heroHeaderClean.classList.add('centered-on-entity');
+                        
+                        // Center the entity container in the viewport
+                        entityContainer.style.transition = 'all 1.2s cubic-bezier(0.23, 1, 0.32, 1)';
+                        entityContainer.style.position = 'fixed';
+                        entityContainer.style.top = '50%';
+                        entityContainer.style.left = '50%';
+                        entityContainer.style.transform = 'translate(-50%, -50%)';
+                        entityContainer.style.zIndex = '25';
+                        
+                        // Update the hero section layout
+                        heroSection.style.transition = 'all 1.2s cubic-bezier(0.23, 1, 0.32, 1)';
+                        heroSection.style.position = 'relative';
+                        
+                        // Reveal the entity nodes
+                        if (this.entity) {
+                            setTimeout(() => {
+                                this.entity.reveal();
+                                this.setupNodeModals();
+                            }, 600); // Wait for positioning animation
+                        }
                     }
                 }
             });

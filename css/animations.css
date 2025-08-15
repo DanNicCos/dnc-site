@@ -9,10 +9,10 @@
 
 @keyframes breathe {
     0%, 100% {
-        transform: scale(1) translateY(0);
+        transform: translateY(0);
     }
     50% {
-        transform: scale(1.02) translateY(-5px);
+        transform: translateY(-5px);
     }
 }
 
@@ -82,22 +82,22 @@
 @keyframes scale-in {
     from {
         opacity: 0;
-        transform: scale(0.8);
+        transform: translateY(10px);
     }
     to {
         opacity: 1;
-        transform: scale(1);
+        transform: translateY(0);
     }
 }
 
 @keyframes rotate-in {
     from {
         opacity: 0;
-        transform: rotate(-180deg) scale(0.5);
+        transform: rotate(-180deg);
     }
     to {
         opacity: 1;
-        transform: rotate(0) scale(1);
+        transform: rotate(0);
     }
 }
 
@@ -197,19 +197,15 @@
 @keyframes morph {
     0%, 100% {
         border-radius: 50%;
-        transform: scale(1);
     }
     25% {
         border-radius: 30%;
-        transform: scale(1.1);
     }
     50% {
         border-radius: 20%;
-        transform: scale(0.9);
     }
     75% {
         border-radius: 40%;
-        transform: scale(1.05);
     }
 }
 

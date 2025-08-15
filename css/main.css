@@ -32,6 +32,7 @@
     --z-entity: 10;
     --z-glow: 5;
     --z-content: 20;
+    --z-hero-centered: 30;
     --z-modal: 100;
 }
 
@@ -78,8 +79,8 @@ body {
 
 .entity-container {
     position: relative;
-    width: 300px;
-    height: 300px;
+    width: 500px;
+    height: 500px;
     margin-bottom: var(--spacing-lg);
 }
 
@@ -163,6 +164,25 @@ body {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-md);
+}
+
+/* Centered hero state for when entity is revealed - shrunk by 30% */
+.hero-header-clean.centered-on-entity {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) scale(0.7) !important;
+    z-index: var(--z-hero-centered) !important;
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+    max-width: 500px;
+    text-align: center;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .hero-header {

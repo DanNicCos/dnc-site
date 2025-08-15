@@ -141,7 +141,7 @@ export class DemoController {
         const codeFloats = document.querySelectorAll('.code-float');
         codeFloats.forEach(float => {
             float.style.opacity = '0';
-            float.style.transform = 'translateY(20px) scale(0.8)';
+            float.style.transform = 'translateY(20px)';
             float.style.transition = 'all 0.8s cubic-bezier(0.23, 1, 0.32, 1)';
         });
     }
@@ -179,22 +179,60 @@ export class DemoController {
     }
     
     triggerReveal() {
-        console.log('triggerReveal called');
+        console.log('=== TRIGGER REVEAL CALLED ===');
         this.isRevealed = true;
         
-        // Fade out tagline
+        // Shrink the name/role text
+        const nameRole = document.querySelector('.hero-name-role');
+        console.log('Found nameRole element:', nameRole);
+        if (nameRole) {
+            console.log('Adding compact class to nameRole');
+            nameRole.classList.add('compact');
+            console.log('nameRole classes after adding compact:', nameRole.className);
+            // Force style change for debugging
+            nameRole.style.fontSize = '1rem';
+            nameRole.style.transition = 'all 0.8s ease';
+        } else {
+            console.error('NAME ROLE ELEMENT NOT FOUND!');
+        }
+        
+        // Transform the button to text-only "Explore →" state
         const taglineButton = this.interactBtn;
-        console.log('Fading out tagline button:', taglineButton);
-        taglineButton.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-        taglineButton.style.opacity = '0';
-        taglineButton.style.transform = 'translateY(-20px)';
+        const taglineText = taglineButton.querySelector('.tagline-text');
+        
+        console.log('Found taglineButton:', taglineButton);
+        console.log('Found taglineText:', taglineText);
+        
+        // Change text content
+        if (taglineText) {
+            console.log('Changing button text to Explore →');
+            taglineText.innerHTML = '<span class="discover-cta">Explore →</span>';
+            console.log('New button innerHTML:', taglineText.innerHTML);
+        } else {
+            console.error('TAGLINE TEXT ELEMENT NOT FOUND!');
+        }
+        
+        // Apply text-only styling
+        if (taglineButton) {
+            console.log('Adding text-only class to button');
+            taglineButton.classList.add('text-only');
+            taglineButton.style.transition = 'all 0.8s ease';
+            // Force inline styles to override everything
+            taglineButton.style.background = 'transparent';
+            taglineButton.style.border = 'none';
+            taglineButton.style.padding = '0';
+            taglineButton.style.boxShadow = 'none';
+            taglineButton.style.color = 'var(--color-accent)';
+            taglineButton.style.fontWeight = '500';
+            console.log('Button classes after adding text-only:', taglineButton.className);
+        }
         
         // Trigger entity reveal animation
         if (this.entity) {
             console.log('Entity found, triggering reveal after 400ms');
             setTimeout(() => {
                 this.entity.reveal();
-            }, 400); // Start entity reveal after tagline starts fading
+            }, 400); // Start entity reveal after tagline starts transforming
         } else {
             console.error('No entity found!');
         }
@@ -205,13 +243,7 @@ export class DemoController {
             this.revealCodeFloats();
         }, 800);
         
-        // Update tagline text for future clicks
-        setTimeout(() => {
-            console.log('Updating tagline text');
-            taglineButton.innerHTML = '<span class="tagline-text">Explore Projects <span class="discover-cta">→</span></span>';
-            taglineButton.style.opacity = '0.7';
-            taglineButton.style.transform = 'translateY(0)';
-        }, 1200);
+        console.log('=== TRIGGER REVEAL COMPLETE ===');
     }
     
     revealCodeFloats() {
@@ -219,7 +251,7 @@ export class DemoController {
         codeFloats.forEach((float, index) => {
             setTimeout(() => {
                 float.style.opacity = '1';
-                float.style.transform = 'translateY(0) scale(1)';
+                float.style.transform = 'translateY(0)';
                 float.style.cursor = 'pointer';
                 
                 // Add click handler for navigation

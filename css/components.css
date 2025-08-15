@@ -4,7 +4,7 @@
 }
 
 .ai-entity.interacting {
-    transform: scale(1.05);
+    /* Scale effect removed */
 }
 
 .entity-container.active .entity-glow {
@@ -14,11 +14,11 @@
 @keyframes pulse-glow {
     0%, 100% {
         opacity: 0.6;
-        transform: translate(-50%, -50%) scale(1);
+        transform: translate(-50%, -50%);
     }
     50% {
         opacity: 1;
-        transform: translate(-50%, -50%) scale(1.1);
+        transform: translate(-50%, -50%);
     }
 }
 
@@ -39,19 +39,19 @@
 @keyframes float-particle {
     0% {
         opacity: 0;
-        transform: translate(0, 0) scale(0);
+        transform: translate(0, 0);
     }
     20% {
         opacity: 1;
-        transform: translate(var(--tx), var(--ty)) scale(1);
+        transform: translate(var(--tx), var(--ty));
     }
     80% {
         opacity: 1;
-        transform: translate(calc(var(--tx) * 2), calc(var(--ty) * 2)) scale(1);
+        transform: translate(calc(var(--tx) * 2), calc(var(--ty) * 2));
     }
     100% {
         opacity: 0;
-        transform: translate(calc(var(--tx) * 3), calc(var(--ty) * 3)) scale(0);
+        transform: translate(calc(var(--tx) * 3), calc(var(--ty) * 3));
     }
 }
 
@@ -83,11 +83,9 @@
 @keyframes neural-pulse {
     0%, 100% {
         opacity: 0;
-        transform: scaleX(0);
     }
     50% {
         opacity: 0.6;
-        transform: scaleX(1);
     }
 }
 
@@ -292,13 +290,17 @@
     cursor: pointer;
 }
 
+.hero-name-role.compact {
+    font-size: 1rem !important;
+}
+
 .hero-name-role:hover {
     color: var(--color-accent);
     text-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
 }
 
 .hero-name-role:hover + .tagline-button {
-    transform: translateY(-3px) scale(1.02);
+    transform: translateY(-3px);
     border-color: var(--color-accent);
     color: var(--color-text);
     box-shadow: 
@@ -344,11 +346,11 @@
         0 0 30px rgba(var(--color-accent-rgb), 0.5),
         0 0 50px rgba(var(--color-accent-rgb), 0.3),
         inset 0 0 20px rgba(var(--color-accent-rgb), 0.15);
-    transform: translateY(-3px) scale(1.02);
+    transform: translateY(-3px);
 }
 
 .tagline-button:active {
-    transform: translateY(-1px) scale(0.98);
+    transform: translateY(-1px);
     box-shadow: 
         0 0 40px rgba(var(--color-accent-rgb), 0.6),
         inset 0 0 30px rgba(var(--color-accent-rgb), 0.2);
@@ -400,6 +402,38 @@
 
 .tagline-button:hover .discover-cta::after {
     width: 100%;
+}
+
+.tagline-button.text-only {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    font-size: clamp(0.8rem, 2vw, 1rem) !important;
+    color: var(--color-accent) !important;
+    font-weight: 500 !important;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: visible;
+    letter-spacing: 0.02em;
+    text-align: center;
+    line-height: 1.4;
+    width: auto !important;
+    min-width: auto !important;
+    box-shadow: none !important;
+}
+
+.tagline-button.text-only:hover {
+    filter: brightness(1.3) !important;
+    text-shadow: 0 0 8px rgba(0, 255, 136, 0.4) !important;
+    transform: translateY(-2px) !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+.tagline-button.text-only::before {
+    display: none;
 }
 
 /* Modal Styles */
