@@ -113,17 +113,51 @@ export class InteractionManager {
 
 export class DemoController {
     constructor() {
+        console.log('DemoController constructor called');
         this.terminal = document.getElementById('terminal-output');
         this.capabilities = document.querySelectorAll('.capability');
         this.showcaseSection = document.getElementById('showcase');
         this.interactBtn = document.getElementById('interact-btn');
         this.isTyping = false;
+        this.isRevealed = false;
+        this.entity = null; // Will be set from main.js
+        
+        console.log('Elements found:', {
+            terminal: this.terminal,
+            showcaseSection: this.showcaseSection,
+            interactBtn: this.interactBtn,
+            capabilities: this.capabilities.length
+        });
         
         this.setupEventListeners();
+        this.hideCodeFloatsInitially();
+    }
+    
+    setEntity(entity) {
+        this.entity = entity;
+    }
+    
+    hideCodeFloatsInitially() {
+        const codeFloats = document.querySelectorAll('.code-float');
+        codeFloats.forEach(float => {
+            float.style.opacity = '0';
+            float.style.transform = 'translateY(20px) scale(0.8)';
+            float.style.transition = 'all 0.8s cubic-bezier(0.23, 1, 0.32, 1)';
+        });
     }
     
     setupEventListeners() {
-        this.interactBtn.addEventListener('click', () => this.startDemo());
+        console.log('Setting up event listeners, interact button:', this.interactBtn);
+        
+        if (this.interactBtn) {
+            this.interactBtn.addEventListener('click', (e) => {
+                console.log('Tagline clicked!');
+                e.preventDefault();
+                this.handleTaglineClick();
+            });
+        } else {
+            console.error('Interact button not found!');
+        }
         
         this.capabilities.forEach(cap => {
             cap.addEventListener('click', (e) => {
@@ -131,6 +165,116 @@ export class DemoController {
                 this.demonstrateCapability(capability);
             });
         });
+    }
+    
+    handleTaglineClick() {
+        console.log('handleTaglineClick called, isRevealed:', this.isRevealed);
+        if (!this.isRevealed) {
+            console.log('Triggering reveal...');
+            this.triggerReveal();
+        } else {
+            console.log('Starting demo...');
+            this.startDemo();
+        }
+    }
+    
+    triggerReveal() {
+        console.log('triggerReveal called');
+        this.isRevealed = true;
+        
+        // Fade out tagline
+        const taglineButton = this.interactBtn;
+        console.log('Fading out tagline button:', taglineButton);
+        taglineButton.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        taglineButton.style.opacity = '0';
+        taglineButton.style.transform = 'translateY(-20px)';
+        
+        // Trigger entity reveal animation
+        if (this.entity) {
+            console.log('Entity found, triggering reveal after 400ms');
+            setTimeout(() => {
+                this.entity.reveal();
+            }, 400); // Start entity reveal after tagline starts fading
+        } else {
+            console.error('No entity found!');
+        }
+        
+        // Reveal the code floats as navigation
+        setTimeout(() => {
+            console.log('Revealing code floats');
+            this.revealCodeFloats();
+        }, 800);
+        
+        // Update tagline text for future clicks
+        setTimeout(() => {
+            console.log('Updating tagline text');
+            taglineButton.innerHTML = '<span class="tagline-text">Explore Projects <span class="discover-cta">→</span></span>';
+            taglineButton.style.opacity = '0.7';
+            taglineButton.style.transform = 'translateY(0)';
+        }, 1200);
+    }
+    
+    revealCodeFloats() {
+        const codeFloats = document.querySelectorAll('.code-float');
+        codeFloats.forEach((float, index) => {
+            setTimeout(() => {
+                float.style.opacity = '1';
+                float.style.transform = 'translateY(0) scale(1)';
+                float.style.cursor = 'pointer';
+                
+                // Add click handler for navigation
+                float.addEventListener('click', () => this.handleNodeClick(index));
+            }, index * 200);
+        });
+    }
+    
+    handleNodeClick(nodeIndex) {
+        const nodeNames = ['Bio', 'Project 1: [Full Agent]', 'Project 2: [TOF-Personal]', 'Project 3: [TOF-Learning]'];
+        console.log(`Clicked on: ${nodeNames[nodeIndex]}`);
+        
+        // Trigger pulse effect on entity
+        if (this.entity) {
+            this.entity.triggerPulse();
+        }
+        
+        // Here you can add navigation logic for each node
+        switch(nodeIndex) {
+            case 0: // Bio
+                this.navigateToBio();
+                break;
+            case 1: // Project 1: [Full Agent]
+                this.navigateToProject1();
+                break;
+            case 2: // Project 2: [TOF-Personal]
+                this.navigateToProject2();
+                break;
+            case 3: // Project 3: [TOF-Learning]
+                this.navigateToProject3();
+                break;
+        }
+    }
+    
+    navigateToBio() {
+        // For now, scroll to about section
+        const aboutSection = document.getElementById('about');
+        if (aboutSection) {
+            aboutSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+    
+    navigateToProject1() {
+        // Navigate to Full Agent project
+        this.startDemo(); // For now, show the demo
+    }
+    
+    navigateToProject2() {
+        // Navigate to TOF-Personal project
+        console.log('Navigate to TOF-Personal');
+    }
+    
+    navigateToProject3() {
+        // Navigate to TOF-Learning project  
+        console.log('Navigate to TOF-Learning');
     }
     
     startDemo() {

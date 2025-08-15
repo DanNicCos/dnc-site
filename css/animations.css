@@ -330,3 +330,67 @@
 .cta-button:hover::before {
     animation: button-shine 1.5s ease-in-out infinite;
 }
+
+/* Staggered Fade-In Animation */
+@keyframes staggered-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes staggered-fade-in-glitch {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    70% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    75% {
+        transform: translateY(0) translateX(-2px);
+    }
+    80% {
+        transform: translateY(0) translateX(2px);
+    }
+    85% {
+        transform: translateY(0) translateX(-1px);
+    }
+    90% {
+        transform: translateY(0) translateX(1px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) translateX(0);
+    }
+}
+
+/* Hero staggered animation classes */
+.hero-stagger-1 {
+    opacity: 0;
+    animation: staggered-fade-in-glitch 0.8s ease-out forwards;
+    animation-delay: 0s;
+}
+
+.hero-stagger-2 {
+    opacity: 0;
+    animation: staggered-fade-in 0.6s ease-out forwards;
+    animation-delay: 0.5s;
+}
+
+.hero-stagger-3 {
+    opacity: 0;
+    animation: staggered-fade-in 0.6s ease-out forwards;
+    animation-delay: 1.0s;
+}
+
+.hero-stagger-4 {
+    opacity: 0;
+    animation: staggered-fade-in 0.6s ease-out forwards;
+    animation-delay: 1.5s;
+}

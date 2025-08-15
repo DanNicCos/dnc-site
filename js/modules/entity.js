@@ -14,6 +14,10 @@ export class AIEntity {
         this.time = 0;
         this.tooltip = null;
         this.hoveredElement = null;
+        this.isRevealed = false;
+        this.nodeVisibility = 0; // 0 = hidden, 1 = fully visible
+        this.onNodeClick = null; // Callback for node clicks
+        this.nodeLabels = ['Bio', 'Project 1: [Full Agent]', 'Project 2: [TOF-Personal]', 'Project 3: [TOF-Learning]'];
         
         this.resize();
         this.initializeNodes();
@@ -21,6 +25,9 @@ export class AIEntity {
         this.animate();
         
         window.addEventListener('resize', () => this.resize());
+        
+        // Add click event listener to canvas
+        this.canvas.addEventListener('click', (e) => this.handleCanvasClick(e));
     }
     
     resize() {
@@ -30,11 +37,24 @@ export class AIEntity {
         this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
         this.centerX = rect.width / 2;
         this.centerY = rect.height / 2;
+        this.initializeNodes(); // Reinitialize nodes after resize
     }
     
     initializeNodes() {
-        const nodeCount = 8;
+        // Clear existing nodes and connections
+        this.nodes = [];
+        this.connections = [];
+        
+        const nodeCount = 4;
         const radius = Math.min(this.centerX, this.centerY) * 0.6;
+        
+        // Define colors for each node
+        const nodeColors = [
+            '#00ff88', // Bio - Green
+            '#0099ff', // Project 1: [Full Agent] - Blue
+            '#ff6b35', // Project 2: [TOF-Personal] - Orange
+            '#ff3366'  // Project 3: [TOF-Learning] - Red
+        ];
         
         for (let i = 0; i < nodeCount; i++) {
             const angle = (i / nodeCount) * Math.PI * 2;
@@ -46,7 +66,10 @@ export class AIEntity {
                 vx: 0,
                 vy: 0,
                 radius: 4,
-                pulsePhase: Math.random() * Math.PI * 2
+                pulsePhase: Math.random() * Math.PI * 2,
+                color: nodeColors[i],
+                label: this.nodeLabels[i],
+                index: i
             });
         }
         
@@ -171,27 +194,91 @@ export class AIEntity {
     }
     
     drawNodes() {
+        if (!this.isRevealed && this.nodeVisibility === 0) return;
+        
         this.nodes.forEach((node, i) => {
             const pulse = Math.sin(this.time * 0.002 + node.pulsePhase);
-            const radius = node.radius + pulse * 2;
+            const baseRadius = node.radius + pulse * 2;
+            
+            // Scale up animation during reveal
+            const scaleProgress = this.nodeVisibility;
+            const radius = baseRadius * (0.3 + scaleProgress * 0.7); // Start at 30% scale
+            
+            // Convert hex color to RGB for gradient
+            const hexToRgb = (hex) => {
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? {
+                    r: parseInt(result[1], 16),
+                    g: parseInt(result[2], 16),
+                    b: parseInt(result[3], 16)
+                } : null;
+            };
+            
+            const rgb = hexToRgb(node.color);
+            const alpha = this.nodeVisibility;
             
             const gradient = this.ctx.createRadialGradient(
                 node.x, node.y, 0,
                 node.x, node.y, radius * 3
             );
-            gradient.addColorStop(0, 'rgba(0, 255, 136, 1)');
-            gradient.addColorStop(0.5, 'rgba(0, 255, 136, 0.5)');
-            gradient.addColorStop(1, 'rgba(0, 255, 136, 0)');
+            gradient.addColorStop(0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`);
+            gradient.addColorStop(0.5, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha * 0.5})`);
+            gradient.addColorStop(1, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0)`);
             
             this.ctx.fillStyle = gradient;
             this.ctx.beginPath();
             this.ctx.arc(node.x, node.y, radius * 3, 0, Math.PI * 2);
             this.ctx.fill();
             
-            this.ctx.fillStyle = '#00ff88';
+            this.ctx.fillStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
             this.ctx.beginPath();
             this.ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
             this.ctx.fill();
+            
+            // Draw node labels when revealed - they follow the nodes dynamically
+            if (this.nodeVisibility > 0.5) {
+                this.ctx.save();
+                
+                // Style the label text
+                this.ctx.font = '12px "JetBrains Mono", monospace';
+                this.ctx.textAlign = 'center';
+                this.ctx.textBaseline = 'middle';
+                
+                // Position label offset from node - follows node movement
+                const labelOffset = 40;
+                const labelX = node.x;
+                const labelY = node.y - labelOffset;
+                
+                // Add background with border like in the image
+                const metrics = this.ctx.measureText(node.label);
+                const padding = 6;
+                const bgWidth = metrics.width + padding * 2;
+                const bgHeight = 18;
+                
+                // Background with border
+                this.ctx.fillStyle = `rgba(26, 26, 26, ${(this.nodeVisibility - 0.5) * 1.8})`;
+                this.ctx.fillRect(
+                    labelX - bgWidth/2, 
+                    labelY - bgHeight/2, 
+                    bgWidth, 
+                    bgHeight
+                );
+                
+                // Border
+                this.ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${(this.nodeVisibility - 0.5) * 1.5})`;
+                this.ctx.lineWidth = 1;
+                this.ctx.strokeRect(
+                    labelX - bgWidth/2, 
+                    labelY - bgHeight/2, 
+                    bgWidth, 
+                    bgHeight
+                );
+                
+                // Label text with node's color
+                this.ctx.fillStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${(this.nodeVisibility - 0.5) * 2})`;
+                this.ctx.fillText(node.label, labelX, labelY);
+                this.ctx.restore();
+            }
         });
     }
     
@@ -269,6 +356,54 @@ export class AIEntity {
             }
         };
         morphAnimation();
+    }
+    
+    reveal() {
+        if (this.isRevealed) return;
+        
+        this.isRevealed = true;
+        this.nodeVisibility = 0;
+        
+        const revealAnimation = () => {
+            this.nodeVisibility += 0.03; // Smooth fade in
+            if (this.nodeVisibility < 1) {
+                requestAnimationFrame(revealAnimation);
+            } else {
+                this.nodeVisibility = 1;
+            }
+        };
+        
+        revealAnimation();
+    }
+    
+    handleCanvasClick(e) {
+        if (!this.isRevealed || this.nodeVisibility < 1) return;
+        
+        const rect = this.canvas.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+        
+        // Check if click is on any node
+        this.nodes.forEach((node, index) => {
+            const distance = Math.sqrt(
+                Math.pow(clickX - node.x, 2) + Math.pow(clickY - node.y, 2)
+            );
+            
+            // Include label area in click detection
+            const clickRadius = 30; // Larger click area including labels
+            
+            if (distance <= clickRadius) {
+                console.log(`Node ${index} (${node.label}) clicked!`);
+                
+                // Trigger visual feedback
+                this.triggerPulse();
+                
+                // Call the callback if set
+                if (this.onNodeClick) {
+                    this.onNodeClick(index);
+                }
+            }
+        });
     }
     
     createTooltip() {
@@ -356,16 +491,12 @@ export class AIEntity {
     
     getNodeTooltipText(nodeIndex) {
         const tooltips = [
-            'Perception Node: Processing sensory inputs',
-            'Memory Node: Storing and retrieving information', 
-            'Reasoning Node: Analyzing patterns and logic',
-            'Learning Node: Adapting from experiences',
-            'Decision Node: Evaluating options and choices',
-            'Action Node: Executing responses and outputs',
-            'Context Node: Understanding situational awareness',
-            'Creativity Node: Generating novel solutions'
+            'Bio',
+            'Project 1: [Full Agent]',
+            'Project 2: [TOF-Personal]',
+            'Project 3: [TOF-Learning]'
         ];
-        return tooltips[nodeIndex] || `Processing Node ${nodeIndex + 1}`;
+        return tooltips[nodeIndex] || `Node ${nodeIndex + 1}`;
     }
     
     isPointNearLine(px, py, x1, y1, x2, y2, threshold) {
